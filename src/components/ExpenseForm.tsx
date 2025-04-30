@@ -14,7 +14,8 @@ export default function ExpenseForm() {
     amount:0,
     expenseName:'',
     category:'',
-    date:new Date()
+    date:new Date(),
+    quantity:1
   })
 
   const {state,dispatch, remainingBudget} = useBudget()
@@ -27,14 +28,14 @@ export default function ExpenseForm() {
     if(state.editingId){
         const editingExpense = state.expenses.filter(current => current.id === state.editingId)[0];
         setExpense(editingExpense)
-        setPreviousAmount(editingExpense.amount)
+        setPreviousAmount(editingExpense.amount * expense.quantity)
     }
   },[state.editingId])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     const {name,value} = e.target;
 
-    const isAmountField = ['amount'].includes(name);
+    const isAmountField = ['amount','quantity'].includes(name);
 
     setExpense({
         ...expense,
@@ -73,7 +74,8 @@ export default function ExpenseForm() {
         amount:0,
         expenseName:'',
         category:'',
-        date:new Date()
+        date:new Date(),
+        quantity:1
     })
 
     setPreviousAmount(0)
@@ -101,17 +103,30 @@ export default function ExpenseForm() {
             placeholder="Añade el nombre del gasto"
             onChange={handleChange} />
         </div>
+        <div className="flex w-full gap-2">
+            <div className="flex flex-col gap-2 flex-1/2">
+                <label htmlFor="amount" className="text-xl">Precio</label>
+                <input
+                className="p-2 bg-slate-100"
+                id="amount"
+                name="amount"
+                type="number"
+                value={expense.amount}
+                placeholder="Añade el precio del gasto"
+                onChange={handleChange} />
+            </div>
 
-        <div className="flex flex-col gap-2">
-            <label htmlFor="amount" className="text-xl">Cantidad</label>
-            <input
-            className="p-2 bg-slate-100"
-            id="amount"
-            name="amount"
-            type="number"
-            value={expense.amount}
-            placeholder="Añade la cantidad del gasto"
-            onChange={handleChange} />
+            <div className="flex flex-col gap-2 flex-1/2">
+                <label htmlFor="quantity" className="text-xl">Cantidad</label>
+                <input
+                className="p-2 bg-slate-100"
+                id="quantity"
+                name="quantity"
+                type="number"
+                value={expense.quantity}
+                placeholder="Añade la cantidad del gasto"
+                onChange={handleChange} />
+            </div>
         </div>
 
         <div className="flex flex-col gap-2">

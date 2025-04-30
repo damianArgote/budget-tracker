@@ -57,10 +57,11 @@ export default function ExpenseDetail({ expense }: ExpenseDetailProps) {
                     <div className="flex-1 space-y-2">
                         <p className="text-sm uppercase text-slate-500 font-bold"></p>
                         <p>{expense.expenseName}</p>
+                        <p>Cantidad: {expense.quantity}</p>
                         <p className="text-slate-600 text-sm">{formatDate(expense.date!.toString())}</p>
                     </div>
 
-                    <AmountDisplay amount={expense.amount} />
+                    <AmountDisplay amount={expense.amount * expense.quantity} />
                 </div>
             </SwipeableListItem>
 

@@ -4,7 +4,8 @@ export type Expense = {
     amount:number;
     expenseName:string;
     category:string;
-    date:Value
+    date:Value,
+    quantity:number
 }
 
 export type DraftExpense = Omit<Expense,'id'>
