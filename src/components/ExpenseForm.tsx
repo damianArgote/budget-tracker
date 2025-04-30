@@ -103,7 +103,7 @@ export default function ExpenseForm() {
             placeholder="Añade el nombre del gasto"
             onChange={handleChange} />
         </div>
-        <div className="flex w-full gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
             <div className="flex flex-col gap-2 flex-1/2">
                 <label htmlFor="amount" className="text-xl">Precio</label>
                 <input
