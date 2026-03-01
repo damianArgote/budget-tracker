@@ -6,6 +6,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { DraftExpense, Value } from "../types";
 import ErrorMessage from "./ErrorMessage";
 import { useBudget } from "../hooks/useBudge";
+import { formatNumberMask, parseNumberMask } from "../helpers";
 
 
 export default function ExpenseForm() {
@@ -18,6 +19,9 @@ export default function ExpenseForm() {
     quantity:1
   })
 
+  const [amountInput, setAmountInput] = useState('');
+  const [quantityInput, setQuantityInput] = useState(formatNumberMask(1, 0));
+
   const {state,dispatch, remainingBudget} = useBudget()
 
   const [error,setError] = useState('')
@@ -28,18 +32,36 @@ export default function ExpenseForm() {
     if(state.editingId){
         const editingExpense = state.expenses.filter(current => current.id === state.editingId)[0];
         setExpense(editingExpense)
+        setAmountInput(formatNumberMask(editingExpense.amount));
+        setQuantityInput(formatNumberMask(editingExpense.quantity, 0));
         setPreviousAmount(editingExpense.amount * expense.quantity)
     }
   },[state.editingId])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
-    const {name,value} = e.target;
+    const { name, value } = e.target;
 
-    const isAmountField = ['amount','quantity'].includes(name);
+    if (name === 'amount') {
+      setAmountInput(value);
+      setExpense({
+        ...expense,
+        amount: parseNumberMask(value)
+      });
+      return;
+    }
+
+    if (name === 'quantity') {
+      setQuantityInput(value);
+      setExpense({
+        ...expense,
+        quantity: parseNumberMask(value)
+      });
+      return;
+    }
 
     setExpense({
         ...expense,
-        [name]: isAmountField ? Number(value) : value
+        [name]: value
     })
   }
 
@@ -78,6 +100,9 @@ export default function ExpenseForm() {
         quantity:1
     })
 
+    setAmountInput('');
+    setQuantityInput(formatNumberMask(1, 0));
+
     setPreviousAmount(0)
   }
 
@@ -103,29 +128,33 @@ export default function ExpenseForm() {
             placeholder="Añade el nombre del gasto"
             onChange={handleChange} />
         </div>
-        <div className="flex flex-col md:flex-row gap-2">
-            <div className="flex flex-col gap-2 flex-1/2">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+            <div className="flex flex-col gap-2 md:flex-1">
                 <label htmlFor="amount" className="text-xl">Precio</label>
                 <input
                 className="p-2 bg-slate-100"
                 id="amount"
                 name="amount"
-                type="number"
-                value={expense.amount}
+                type="text"
+                inputMode="decimal"
+                value={amountInput}
                 placeholder="Añade el precio del gasto"
-                onChange={handleChange} />
+                onChange={handleChange}
+                onBlur={() => setAmountInput(formatNumberMask(expense.amount))} />
             </div>
 
-            <div className="flex flex-col gap-2 flex-1/2">
+            <div className="flex flex-col gap-2 md:flex-1">
                 <label htmlFor="quantity" className="text-xl">Cantidad</label>
                 <input
                 className="p-2 bg-slate-100"
                 id="quantity"
                 name="quantity"
-                type="number"
-                value={expense.quantity}
+                type="text"
+                inputMode="numeric"
+                value={quantityInput}
                 placeholder="Añade la cantidad del gasto"
-                onChange={handleChange} />
+                onChange={handleChange}
+                onBlur={() => setQuantityInput(formatNumberMask(expense.quantity, 0))} />
             </div>
         </div>
 

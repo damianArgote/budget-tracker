@@ -9,7 +9,7 @@ export default function BudgetTracker() {
   const percentage = +((totalExpense / state.budget) * 100).toFixed(2)
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-5">
         <div className="flex justify-center">
             <CircularProgressbar
                 value={percentage}

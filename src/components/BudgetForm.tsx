@@ -1,13 +1,17 @@
 import { ChangeEvent, FormEvent, useMemo, useState } from "react"
 import { useBudget } from "../hooks/useBudge";
+import { formatNumberMask, parseNumberMask } from "../helpers";
 
 
 export default function BudgetForm() {
-  const [budget,setBudget] = useState(0);
-  const {dispatch} = useBudget();
+  const [budget, setBudget] = useState(0);
+  const [budgetInput, setBudgetInput] = useState('');
+  const { dispatch } = useBudget();
 
-  const handleChange = (e :ChangeEvent<HTMLInputElement>) => {
-    setBudget(e.target.valueAsNumber)
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setBudgetInput(value);
+    setBudget(parseNumberMask(value));
   }
 
   const isValid = useMemo(() => 
@@ -31,11 +35,13 @@ export default function BudgetForm() {
           <input 
           id="budget"
           name="budget"
-          type="number" 
+          type="text"
+          inputMode="decimal"
           className="w-full border boder-gray-200 bg-white p-2 rounded-lg"
           placeholder="Define tu presupuesto"
-          value={budget}
-          onChange={handleChange} />
+          value={budgetInput}
+          onChange={handleChange}
+          onBlur={() => setBudgetInput(formatNumberMask(budget))} />
       </div>
 
       <input

@@ -12,7 +12,7 @@ export default function FilterByCategory() {
     }   
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-10">
+    <div className="bg-white shadow-lg rounded-lg p-6 md:p-10">
         <form>
             <div className="flex flex-col md:flex-row md:items-center gap-5">
                 <label htmlFor="category">Filtrar Gastos</label>
