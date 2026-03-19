@@ -34,9 +34,9 @@ export default function ExpenseForm() {
         setExpense(editingExpense)
         setAmountInput(formatNumberMask(editingExpense.amount));
         setQuantityInput(formatNumberMask(editingExpense.quantity, 0));
-        setPreviousAmount(editingExpense.amount * expense.quantity)
+        setPreviousAmount(editingExpense.amount * editingExpense.quantity)
     }
-  },[state.editingId])
+  },[state.editingId, state.expenses])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -107,85 +107,90 @@ export default function ExpenseForm() {
   }
 
   return (
-    <form className="space-y-5" onSubmit={handleSubmit}>
-        <legend className="uppercase text-center text-2xl font-black border-b-4 border-blue-500 py-2">
-            {!state.editingId ?  'Nuevo Gasto' : 'Editando Gasto'}
-        </legend>
-
+    <form className="space-y-5 pb-6" onSubmit={handleSubmit}>
         {error && 
             <ErrorMessage>
                 {error}
             </ErrorMessage>}
 
         <div className="flex flex-col gap-2">
-            <label htmlFor="expenseName" className="text-xl">Nombre de Gasto</label>
+            <label htmlFor="expenseName" className="text-base font-medium text-gray-700">Nombre de Gasto</label>
             <input
-            className="p-2 bg-slate-100"
+            className="p-3 md:p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
             id="expenseName" 
             type="text"
             name="expenseName"
             value={expense.expenseName}
-            placeholder="Añade el nombre del gasto"
+            placeholder="Ej: Compras del supermercado"
             onChange={handleChange} />
         </div>
-        <div className="flex flex-col md:flex-row gap-2 md:gap-4">
-            <div className="flex flex-col gap-2 md:flex-1">
-                <label htmlFor="amount" className="text-xl">Precio</label>
+        <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+            <div className="flex flex-col gap-2 flex-1">
+                <label htmlFor="amount" className="text-base font-medium text-gray-700">Precio</label>
                 <input
-                className="p-2 bg-slate-100"
+                className="p-3 md:p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 id="amount"
                 name="amount"
                 type="text"
                 inputMode="decimal"
                 value={amountInput}
-                placeholder="Añade el precio del gasto"
+                placeholder="0.00"
                 onChange={handleChange}
                 onBlur={() => setAmountInput(formatNumberMask(expense.amount))} />
             </div>
 
-            <div className="flex flex-col gap-2 md:flex-1">
-                <label htmlFor="quantity" className="text-xl">Cantidad</label>
+            <div className="flex flex-col gap-2 flex-1">
+                <label htmlFor="quantity" className="text-base font-medium text-gray-700">Cantidad</label>
                 <input
-                className="p-2 bg-slate-100"
+                className="p-3 md:p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 id="quantity"
                 name="quantity"
                 type="text"
                 inputMode="numeric"
                 value={quantityInput}
-                placeholder="Añade la cantidad del gasto"
+                placeholder="1"
                 onChange={handleChange}
                 onBlur={() => setQuantityInput(formatNumberMask(expense.quantity, 0))} />
             </div>
         </div>
 
         <div className="flex flex-col gap-2">
-            <label htmlFor="category" className="text-xl">Categoria</label>
-            <select
-            className="p-2 bg-slate-100"
-            id="category"
-            name="category"
-            value={expense.category}
-            onChange={handleChange}>
-                
-                <option value="">-- Seleccione --</option>
-                {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-            </select>
+            <label htmlFor="category" className="text-base font-medium text-gray-700">Categoría</label>
+            <div className="relative">
+                <select
+                className="w-full p-3 md:p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all appearance-none"
+                id="category"
+                name="category"
+                value={expense.category}
+                onChange={handleChange}>
+                    
+                    <option value="">-- Seleccione --</option>
+                    {categories.map(cat => (
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
         </div>
 
         <div className="flex flex-col gap-2">
-            <label htmlFor="expenseName" className="text-xl">Fecha Gasto</label>
+            <label htmlFor="date" className="text-base font-medium text-gray-700">Fecha</label>
             <DatePicker
-            className="bg-slate-100 p-2 border-0"
+            className="w-full p-3 md:p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-base"
+            id="date"
             value={expense.date}
             onChange={handleChangeDate}
             />
         </div>
 
-        <input type="submit"
-        className="bg-blue-600 cursor-pointer uppercase rounded-lg text-white w-full p-2"
-        value={!state.editingId ? 'Registrar Gasto' : 'Editar Gasto'} />
+        <button type="submit"
+        className="bg-blue-600 cursor-pointer uppercase rounded-lg text-white w-full p-3.5 md:p-2.5 text-base font-bold hover:bg-blue-700 active:scale-[0.98] transition-all touch-manipulation">
+            {!state.editingId ? 'Registrar Gasto' : 'Guardar Cambios'} 
+        </button>
     </form>
   )
 }

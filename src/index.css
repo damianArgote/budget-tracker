@@ -1,15 +1,75 @@
 @import "tailwindcss";
 
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+  --safe-area-inset-right: env(safe-area-inset-right);
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.pt-safe {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.pl-safe {
+  padding-left: max(1rem, env(safe-area-inset-left));
+}
+
+.pr-safe {
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
 .swipeable-list-item__leading-actions, 
 .swipeable-list-item__trailing-actions {
-  @apply text-white text-lg uppercase font-bold;
+  @apply text-white text-sm font-bold;
 }
-.swipeable-list-item__leading-actions{
+
+.swipeable-list-item__leading-actions {
   @apply bg-blue-600;
 }
+
 .swipeable-list-item__trailing-actions {
-  @apply bg-pink-600;
+  @apply bg-red-600;
 }
+
 .swipeable-list .swipe-action {
-  @apply flex justify-center items-center
+  @apply flex justify-center items-center;
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .fixed.bottom-fab {
+    bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+input, select, textarea, button {
+  touch-action: manipulation;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  font-size: 16px !important;
 }

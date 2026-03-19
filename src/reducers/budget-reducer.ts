@@ -1,5 +1,7 @@
 import { Category, DraftExpense, Expense } from "../types"
-import {v4 as uuid} from 'uuid'
+import { StorageKeys, getStorageItem } from "../utils/storage"
+
+const generateId = (): string => crypto.randomUUID()
 
 export type BudgetActions =
 {type:'add-budget', payload: {budget:number}} |
@@ -23,14 +25,11 @@ export type BudgetState = {
 }
 
 const initialBudget = (): number => {
-    const localStorageBudget = localStorage.getItem('budget');
-    return localStorageBudget ? Number(localStorageBudget) : 0
+    return getStorageItem<number>(StorageKeys.BUDGET, 0)
 }
 
 const localStorageExpense = (): Expense[] => {
-    const lsExpenses = localStorage.getItem('expenses');
-
-    return lsExpenses ? JSON.parse(lsExpenses) : []
+    return getStorageItem<Expense[]>(StorageKeys.EXPENSES, [])
 }
 
 export const initialState: BudgetState = {
@@ -44,7 +43,7 @@ export const initialState: BudgetState = {
 const createExpense = (draftExpense: DraftExpense): Expense => {
     return {
         ...draftExpense,
-        id:uuid()
+        id: generateId()
     }
 }
 

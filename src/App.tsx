@@ -5,6 +5,8 @@ import BudgetTracker from "./components/BudgetTracker";
 import ExpenseModal from "./components/ExpenseModal";
 import ExpenseList from "./components/ExpenseList";
 import FilterByCategory from "./components/FilterByCategory";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { StorageKeys, setStorageItem } from "./utils/storage";
 
 function App() {
   const {state} = useBudget();
@@ -14,33 +16,34 @@ function App() {
   } ,[state.budget])
 
   useEffect(() => {
-    localStorage.setItem('budget',state.budget.toString());
-    localStorage.setItem('expenses', JSON.stringify(state.expenses))
-  },[state])
+    setStorageItem(StorageKeys.BUDGET, state.budget);
+    setStorageItem(StorageKeys.EXPENSES, state.expenses);
+  },[state.budget, state.expenses])
 
   return (
-    <>
-      <header className="bg-blue-600 py-6 md:py-8 max-h-72">
-        <h1 className="uppercase text-center font-black text-3xl md:text-4xl text-white">
+    <ErrorBoundary>
+      <header className="bg-blue-600 py-5 md:py-8 px-4">
+        <h1 className="uppercase text-center font-black text-2xl md:text-4xl text-white tracking-tight">
             Planificador de Gastos
         </h1>
       </header>
 
-      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg mt-6 md:mt-10 p-6 md:p-10">
+      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg mt-4 md:mt-10 mx-4 md:mx-auto p-5 md:p-10">
         {isValidBudget ? <BudgetTracker/> : <BudgetForm/>}
       </div>
       {
         isValidBudget && (
-          <main className="max-w-3xl mx-auto px-4 py-6 md:py-10">
-              <FilterByCategory/>
+          <main className="max-w-3xl mx-auto px-4 py-5 md:py-10 pb-24">
+              <div className="mb-4">
+                <FilterByCategory/>
+              </div>
               <ExpenseList/>
               <ExpenseModal/>
           </main>
-         
+        
         )
       }
-
-    </>
+    </ErrorBoundary>
   )
 }
 
