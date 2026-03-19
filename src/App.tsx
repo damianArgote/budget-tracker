@@ -22,13 +22,13 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <header className="bg-blue-600 py-5 md:py-8 px-4">
-        <h1 className="uppercase text-center font-black text-2xl md:text-4xl text-white tracking-tight">
+      <header className="bg-blue-600 py-5 md:py-8 px-4 shadow-lg">
+        <h1 className="uppercase text-center font-extrabold text-2xl md:text-4xl text-white tracking-tight">
             Planificador de Gastos
         </h1>
       </header>
 
-      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg mt-4 md:mt-10 mx-4 md:mx-auto p-5 md:p-10">
+      <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl mt-4 md:mt-10 mx-4 md:mx-auto p-6 md:p-10">
         {isValidBudget ? <BudgetTracker/> : <BudgetForm/>}
       </div>
       {

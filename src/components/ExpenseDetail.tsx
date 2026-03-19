@@ -61,16 +61,16 @@ export default function ExpenseDetail({ expense }: ExpenseDetailProps) {
 
                     <div className="flex-1 min-w-0 space-y-1">
                         <div className="flex items-center gap-2">
-                            <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600 font-medium">
+                            <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600 font-bold">
                                 {categoryInfo.name}
                             </span>
                         </div>
-                        <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                        <p className="text-base md:text-lg font-extrabold text-gray-900 truncate">
                             {expense.expenseName}
                         </p>
-                        <div className="flex flex-wrap items-center gap-x-3 text-sm text-gray-500">
+                        <div className="flex flex-wrap items-center gap-x-3 text-sm font-semibold text-gray-500">
                             {expense.quantity > 1 && (
-                                <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs font-medium">
+                                <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs font-bold">
                                     x{expense.quantity}
                                 </span>
                             )}
